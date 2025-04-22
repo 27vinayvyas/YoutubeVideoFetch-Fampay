@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_URL=mongodb://mongo:27017/videoDatabase
+      - REDIS_URL=redis://redis:6379
+      - YOUTUBE_API_KEYS=AIzaSyCXansSxLsLilJNAYVuwM6IcR3lNVH8CEs,AIzaSyBsMKzSmLU9I9T6ogcLgdFlOggz4MzuhZk,AIzaSyB7k7KYR4W4N9JLiC56bxfUZluF5riQAqY,AIzaSyBiKEabQqJch5L9IYZK5V8hNqke6Zg8Cc4,AIzaSyCZTZAXryamJU3rK_3zhdyFW7zliYPBT0U
+    depends_on:
+      - mongo
+      - redis
+    volumes:
+      - .:/usr/src/app # Mount local files for live development
+
+  mongo:
+    image: mongo:5.0
+    container_name: mongodb
+    ports:
+      - "28017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  redis:
+    image: redis:6.2
+    container_name: redis
+    ports:
+      - "6380:6379"
+
+volumes:
+  mongo-data:
